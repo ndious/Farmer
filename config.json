@@ -1,0 +1,15 @@
+{
+	"folders": {
+		"spawners": "Spawners",
+		"libs": "Libs",
+		"web": "www",
+		"app": "app"
+	},
+	"ignored": [
+		".",
+		"..",
+		".DS_Store",
+		"CreeperAbstract.php",
+		"CreeperInterface.php"
+	]
+}
