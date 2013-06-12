@@ -13,12 +13,14 @@ namespace Farmer\Libs\Parser;
  * @author nbremont
  */
 class XmlParser implements IParser {
-    
-    public function dump() {
-        
+
+    public function dump($content) {
+        // to do implements
+        return "";
     }
 
-    public function parse() {
-        
-    }    
+    public function parse($content) {
+        return \simplexml_load_string($content);
+    }
+
 }

@@ -13,11 +13,11 @@ namespace Farmer\Libs\Parser;
  */
 class JsonParser implements IParser {
     
-    public function dump() {
-        
+    public function dump($content) {
+        return json_decode($content);
     }
 
-    public function parse() {
-        
+    public function parse($content) {
+        return json_encode($content);
     }    
 }

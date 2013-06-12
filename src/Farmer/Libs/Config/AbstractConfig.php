@@ -1,6 +1,6 @@
 <?php
 
-namespace Farmer\Libs\Script\Config;
+namespace Farmer\Libs\Config;
 
 use Farmer\Libs\Parser\IParser;
 
@@ -59,7 +59,7 @@ abstract class AbstractConfig implements IConfig {
      * 
      */
     public function __toString() {
-        
+        return $this->parser->dump($this->parameters);
     }
 
 }

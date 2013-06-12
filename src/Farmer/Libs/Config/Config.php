@@ -1,8 +1,8 @@
 <?php
 
-namespace Farmer\Libs\Script\Config;
+namespace Farmer\Libs\Config;
 
-use Farmer\Libs\Script\Config\AbstractConfig,
+use Farmer\Libs\Config\AbstractConfig,
     Farmer\Libs\Parser\IParser;
 
 /*

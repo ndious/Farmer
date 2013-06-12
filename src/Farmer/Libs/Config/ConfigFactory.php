@@ -1,6 +1,6 @@
 <?php
 
-namespace Farmer\Libs\Script\Config;
+namespace Farmer\Libs\Config;
 
 use Farmer\Libs\Parser\IParser;
 
@@ -40,7 +40,7 @@ class ConfigFactory {
      * 
      * @return Farmer\Libs\Parser\Config
      */
-    public function getConfig() {
+    private function getConfig() {
         return $this->config;
     }
 
@@ -51,8 +51,8 @@ class ConfigFactory {
      */
     public static function getInstance(IParser $parser) {
         if (NULL === self::$instance)
-            self::$instance = new ConfigFactory($parser);
-        return self::$instance;
+            self::$instance = new ConfigFactory($parser);;
+        return self::$instance->getConfig();
     }
 
 }

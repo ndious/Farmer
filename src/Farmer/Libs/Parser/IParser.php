@@ -14,6 +14,6 @@ namespace Farmer\Libs\Parser;
  */
 interface IParser {
     
-    public function parse();
-    public function dump();
+    public function parse($content);
+    public function dump($content);
 }

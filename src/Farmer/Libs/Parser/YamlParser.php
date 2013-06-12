@@ -14,11 +14,11 @@ namespace Farmer\Libs\Parser;
  */
 class YamlParser implements IParser {
     
-    public function dump() {
-        
+    public function dump($content) {
+        return \yaml_emit($content);
     }
 
-    public function parse() {
-        return yaml_parse("");
+    public function parse($content) {
+        return \yaml_parse($content);
     }    
 }

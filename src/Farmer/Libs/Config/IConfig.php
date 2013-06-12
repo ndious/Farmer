@@ -1,6 +1,6 @@
 <?php
 
-namespace Farmer\Libs\Script\Config;
+namespace Farmer\Libs\Config;
 
 /**
  * 
