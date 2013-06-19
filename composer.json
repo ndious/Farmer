@@ -2,7 +2,11 @@
     "name": "farmer/framework-alpha-edition",
     "description": "The \"Farmer Alpha\" distribution",
     "autoload": {
-        "psr-0": { "Farmer\\": "src/" }
+        "psr-0": {
+            "Farmer\\": "src/",
+            "FarmerTest\\": "src/",
+            "Spawners\\": "src/"
+        }
     },
     "require": {
         "php": ">=5.4.0",

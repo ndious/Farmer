@@ -1,22 +1,26 @@
 <?php
 namespace Spawners;
 
+Use Farmer\Application;
+
 abstract class CreeperAbstract implements CreeperInterface
 {
-    private $farmer;
+    private $application;
     private static $instance;
+    const CLASS_NAMESPACE = '\Spawners\\';
 
-    private function __construct($caller)
+    protected function __construct($caller)
     {
-        if ($caller instanceOf Farmer) {
-            $this->farmer = $caller;           
+        if ($caller instanceOf Application) {
+            $this->application = $caller;           
         }
     }
 
     protected static function load($class_name, $caller)
     {
-        if (self::$instance) {
-            self::$inctance = new $class_name($caller);
+        if (!self::$instance) {
+            $class_name = static::CLASS_NAMESPACE . $class_name;
+            self::$instance = new $class_name($caller);
         }
         return self::$instance;
     }
@@ -24,11 +28,11 @@ abstract class CreeperAbstract implements CreeperInterface
     public static function __callStatic($call, $values)
     {
         $self = self::getInstance();
-        $self->getFarmerInstance()->__callStatic($call, $values);
+        $self->getApplication()->__callStatic($call, $values);
     }
 
-    protected function getFarmerInstance()
+    protected function getApplication()
     {
-        return $this->farmer;
+        return $this->application;
     }
 }

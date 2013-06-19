@@ -23,7 +23,7 @@ class Application
         if (!self::$instance) {
             try {
                 self::$instance = new Application();
-//                self::$instance->creepSpawn();
+                self::$instance->creepSpawn();
             } catch (\Exception $exception) {
                 echo '<pre>';
                 var_dump($exception->getCode(), $exception->getMessage());
@@ -35,7 +35,7 @@ class Application
 
     private function pop($creeper)
     {
-        $creeper_namespace = 'Spawners'.self::NAMESPACE_SEPARATOR.$creeper;
+        $creeper_namespace = static::NAMESPACE_SEPARATOR . 'Spawners' . static::NAMESPACE_SEPARATOR . $creeper;
         $creep = $creeper_namespace::getInstance($this);
         if ($creep instanceof \Spawners\CreeperAbstract) {
             $this->register->spawners->{strtolower($creeper)} = $creep;
