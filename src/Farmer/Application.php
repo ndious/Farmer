@@ -11,7 +11,7 @@ class Application
     private function __construct()
     {
         $this->register = (object)$this->register;
-        $config = json_decode(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'config.json'));
+        $config = json_decode(file_get_contents(dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'config.json'));
         
         foreach ($config as $key => $value) {
             $this->register->{$key} = (object)$value;
@@ -23,7 +23,7 @@ class Application
         if (!self::$instance) {
             try {
                 self::$instance = new Application();
-                self::$instance->creepSpawn();
+//                self::$instance->creepSpawn();
             } catch (\Exception $exception) {
                 echo '<pre>';
                 var_dump($exception->getCode(), $exception->getMessage());
@@ -89,7 +89,7 @@ class Application
         try {
             require_once(self::SPAWNERS_DIR() . $filename);
         } catch (\Exception $e) {
-            throw new \Exception('File not found ' . self::SPAWNERS_DIR() . $creeper, 1);
+            throw new \Exception('File not found ' . self::SPAWNERS_DIR() . $filename, 1);
         }
     }
 
@@ -102,7 +102,7 @@ class Application
     {
         $self = self::getInstance();
         if ($call === 'set') {
-            $sefl->setInRegister($call, $values);
+            $self->setInRegister($call, $values);
         } elseif (substr($call, 0, 6) === 'sendTo' && count($values) === 2) {
             return $self->sendTo(substr($call, 6), $values[0], $values[1]);
         } elseif (substr($call, -4, 4) === '_DIR') {
@@ -115,9 +115,12 @@ class Application
     protected function getFolder($key)
     {
         try {
-            $folder = $this->register->folders->{$key};
-            //return realpath(__DIR__ . DIRECTORY_SEPARATOR . $folder) . DIRECTORY_SEPARATOR;
-            return __DIR__;
+            $folder = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . $this->register->folders->{$key};
+            if (file_exists($folder)) {
+                return realpath($folder) . DIRECTORY_SEPARATOR;
+            } else {
+                throw new \Exception('Folder "' . $folder . '" does not exist', 1);
+            }
         } catch (\Exception $error) {
             throw new \Exception($error->getMessage(), 1);
         }

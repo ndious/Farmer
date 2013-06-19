@@ -1,5 +1,5 @@
 <?php
-namespace Farmer\Spawners;
+namespace Spawners;
 
 interface CreeperInterface
 {

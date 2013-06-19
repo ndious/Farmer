@@ -1,7 +1,5 @@
 <?php
-namespace Farmer\Spawners;
-
-use Farmer\Lib;
+namespace Spawners;
 
 abstract class CreeperAbstract implements CreeperInterface
 {
