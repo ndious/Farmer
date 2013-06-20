@@ -8,9 +8,9 @@ class RunTime implements \Iterator
 {
     private $runtime;
     
-    public function __construct($config)
+    public function __construct(array $runtime)
     {
-        $this->runtime = $config->get('runtime');
+        $this->runtime = $runtime;
     }
     
     public function valid()
