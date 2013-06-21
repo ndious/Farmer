@@ -1,7 +1,7 @@
 <?php
 namespace Farmer\Application;
 
-class RunTime implements \Iterator
+class Runtime implements \Iterator
 {
     private $runtime;
     

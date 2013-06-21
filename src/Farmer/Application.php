@@ -7,7 +7,6 @@ class Application
 {
     private static $instance;
     private $register = array();
-    private $configFile = (dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'config.json');
 
     const NAMESPACE_SEPARATOR = '\\';
 
@@ -16,7 +15,7 @@ class Application
         $this->environment = $environment;
         $this->register = Register::getInstance();
         if (!$this->register->isLoaded()) {
-            $this->register->setConfig(json_decode(file_get_contents($this->configFile));
+            $this->register->setConfig(json_decode(file_get_contents(dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'config.json')));
         }
     }
 
@@ -60,8 +59,8 @@ class Application
     protected function creepSpawn()
     {
         $creepers = scandir(self::SPAWNERS_DIR());
-        require_once(self::SPAWNERS_DIR() . 'CreeperAbstract.php');
-        require_once(self::SPAWNERS_DIR() . 'CreeperInterface.php');
+        self::requireOnce('CreeperAbstract.php');
+        self::requireOnce('CreeperInterface.php');
 
         if ($creepers) {
             $ignored_files = (array)$this->register->get('ignored');
@@ -82,7 +81,7 @@ class Application
         try {
             require_once(self::SPAWNERS_DIR() . $filename);
         } catch (\Exception $e) {
-            throw new \Exception('File not found ' . self::SPAWNERS_DIR() . $filename, 1);
+            throw new Application\Exception('File not found ' . self::SPAWNERS_DIR() . $filename, Application\Exception::FILE_DO_NOT_EXIST);
         }
     }
 
@@ -102,15 +101,11 @@ class Application
 
     protected function getFolder($key)
     {
-        try {
-            $folder = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . $this->register->getFolders($key);
-            if (file_exists($folder)) {
-                return realpath($folder) . DIRECTORY_SEPARATOR;
-            } else {
-                throw new \Exception('Folder "' . $folder . '" does not exist', 1);
-            }
-        } catch (\Exception $error) {
-            throw new \Exception($error->getMessage(), 1);
+        $folder = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . $this->register->getFolders($key);
+        if (file_exists($folder)) {
+            return realpath($folder) . DIRECTORY_SEPARATOR;
+        } else {
+            throw new Application\Exception('Folder "' . $folder . '" does not exist', Application\Exception::BAD_FOLDER);
         }
     }
 }
