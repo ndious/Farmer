@@ -1,37 +1,26 @@
 <?php
 namespace Farmer\Application;
 
-class Runtime implements \Iterator
+use Farmer\Application;
+
+class Runtime
 {
-    private $runtime;
+    private $pile;
     
-    public function __construct(array $runtime)
+    public function __construct(array $pile)
     {
-        $this->runtime = $runtime;
+        $this->pile = $pile;
+        Application::sendToRegister('save', $this);
     }
     
-    public function valid()
+    public function execute()
     {
-        ;
-    }
-    
-    public function key()
-    {
-        ;
-    }
-    
-    public function current()
-    {
-        ;
-    }
-    
-    public function rewind()
-    {
-        ;
-    }
-    
-    public function next()
-    {
-        ;
+        Application::sentToDispatcher('event', 'runtime:preexecute');
+        foreach ($this->pile as $key => $value) {
+            Application::sentToDispatcher('event', '$value:preexecute');
+            Application::{'sendTo' . ucfirst($value)}('execute');
+            Application::sentToDispatcher('event', 'runtime:postexecute');
+        }
+        Application::sentToDispatcher('event', 'runtime:preexecute');
     }
 }
