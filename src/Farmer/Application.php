@@ -42,7 +42,7 @@ class Application
             $register = Register::getInstance();
             $register->setSpawner(strtolower($creeper), $creep);
         } else {
-            throw new \Exception($creeper_namespace . ' must be a instance of Spawners\CreeperAbstract and Spawners\CreeperInterface', 1);
+            throw new Application\Exception($creeper_namespace . ' must be a instance of Spawners\CreeperAbstract and Spawners\CreeperInterface', Application\Exception::BAD_IMPLEMENTATION);
         }
     }
 
@@ -72,7 +72,7 @@ class Application
                 }
             }
         } else {
-            throw new \Exception('Spawner directory not found', 1);
+            throw new Application\Exception('Spawner directory not found', Application\Exception::BAD_FOLDER);
         }
     }
 
@@ -95,7 +95,7 @@ class Application
         } elseif (substr($call, -4, 4) === '_DIR') {
             return $self->getFolder(strtolower(substr($call, 0, -4)));
         } else {
-            throw new \Exception('Static call inexistant');
+            throw new Application\Exception('Static call inexistant', Application\Exception::BAD_REQUEST);
         }
     }
 

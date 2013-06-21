@@ -12,4 +12,10 @@
         "CreeperAbstract.php",
         "CreeperInterface.php"
     ]
+    "runtime": [
+        "autoloader",
+        "log",
+        "request",
+        "controller"
+    ]
 }
