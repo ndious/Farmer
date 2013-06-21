@@ -1,9 +1,6 @@
 <?php
 namespace Farmer\Application;
 
-/**
- * @depend Config
- */
 class RunTime implements \Iterator
 {
     private $runtime;

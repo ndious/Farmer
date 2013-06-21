@@ -1,20 +1,22 @@
 <?php
 namespace Farmer;
 
+use Farmer\Application\Register;
+
 class Application
 {
     private static $instance;
     private $register = array();
+    private $configFile = (dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'config.json');
 
     const NAMESPACE_SEPARATOR = '\\';
 
-    private function __construct()
+    public function __construct($environment = 'production')
     {
-        $this->register = (object)$this->register;
-        $config = json_decode(file_get_contents(dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'config.json'));
-        
-        foreach ($config as $key => $value) {
-            $this->register->{$key} = (object)$value;
+        $this->environment = $environment;
+        $this->register = Register::getInstance();
+        if (!$this->register->isLoaded()) {
+            $this->register->setConfig(json_decode(file_get_contents($this->configFile));
         }
     }
 
@@ -38,11 +40,8 @@ class Application
         $creeper_namespace = static::NAMESPACE_SEPARATOR . 'Spawners' . static::NAMESPACE_SEPARATOR . $creeper;
         $creep = $creeper_namespace::getInstance($this);
         if ($creep instanceof \Spawners\CreeperAbstract) {
-            $this->register->spawners->{strtolower($creeper)} = $creep;
-            $messages = $creep->getMessages();
-            foreach ($messages as $message => $value) {
-                $this->register->messages[strtolower($creeper).':'.$message]  = $value;
-            }
+            $register = Register::getInstance();
+            $register->setSpawner(strtolower($creeper), $creep);
         } else {
             throw new \Exception($creeper_namespace . ' must be a instance of Spawners\CreeperAbstract and Spawners\CreeperInterface', 1);
         }
@@ -50,11 +49,7 @@ class Application
 
     protected function sendTo($spawner, $message, $value)
     {
-        if (array_key_exists(strtolower($spawner) . ':' . $message, $this->register->messages)) {
-            $this->register->spawners->{strtolower($spawner)}->$message($value);
-        } else {
-            throw new \Exception('Bad request ' . $spawner . ':' . $message);
-        }
+        $spawner = $this->register->getSpawner(strtolower($spawner), $message)->$message($value);
     }
 
     private function kill($creeper)
@@ -69,9 +64,7 @@ class Application
         require_once(self::SPAWNERS_DIR() . 'CreeperInterface.php');
 
         if ($creepers) {
-            $this->register->spawners = new \stdClass();
-            $this->register->messages = array();
-            $ignored_files = (array)$this->register->ignored;
+            $ignored_files = (array)$this->register->get('ignored');
 
             foreach ($creepers as $creeper) {
                 if (!in_array($creeper, $ignored_files)) {
@@ -93,11 +86,6 @@ class Application
         }
     }
 
-    public function register($throw = true, $prepend = false) {
-        spl_autoload_register(array($this, 'autoload'), true, $prepend);
-        return $this;
-    }
-
     public static function __callStatic($call, $values)
     {
         $self = self::getInstance();
@@ -115,7 +103,7 @@ class Application
     protected function getFolder($key)
     {
         try {
-            $folder = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . $this->register->folders->{$key};
+            $folder = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . $this->register->getFolders($key);
             if (file_exists($folder)) {
                 return realpath($folder) . DIRECTORY_SEPARATOR;
             } else {
