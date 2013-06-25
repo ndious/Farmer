@@ -19,12 +19,17 @@ class Application
         }
     }
 
+    public function registerCoreApplication()
+    {
+
+    }
+
     private static function getInstance()
     {
         if (!self::$instance) {
             try {
                 self::$instance = new Application();
-                self::$instance->creepSpawn();
+                //self::$instance->creepSpawn();
             } catch (\Exception $exception) {
                 echo '<pre>';
                 var_dump($exception->getCode(), $exception->getMessage());
