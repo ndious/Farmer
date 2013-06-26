@@ -1,10 +1,12 @@
 <?php
 namespace Farmer\Pattern;
 
+use Farmer\Pattern\PatternExecption;
+
 abstract class Singleton
 {
-    private $instance;
-    protected $classNamespace;
+    protected static $instance;
+    protected static $classNamespace;
     
     protected function __construct()
     {}
@@ -19,11 +21,11 @@ abstract class Singleton
     
     protected final static function getObject()
     {
-        if ($this->classNamespace) {
-            $class = $this->classNamespace;
+        if (self::$classNamespace) {
+            $class = self::$classNamespace;
             return new $class();
         } else {
-            throw new PatternExecption('classNamespace was not informed', PatternExecption::BAD_IMPLEMENTATION);
+            throw new PatternException('classNamespace was not informed', PatternException::BAD_IMPLEMENTATION);
         }
     }
 }

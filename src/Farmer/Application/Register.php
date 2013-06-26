@@ -1,11 +1,16 @@
 <?php
 namespace Farmer\Application;
 
-use Farmer\Pattern\Singleton;
 
-class Register extends Singleton
+class Register
 {
     private $register;
+    protected static $classNamespace = '\Farmer\Application\Register';
+
+    public function __construct()
+    {
+
+    }
 
     public static function __callStatic($call, $values)
     {
@@ -32,10 +37,30 @@ class Register extends Singleton
         }
     }
 
+    private function initRegister()
+    {
+        if (!$this->isLoaded()) {
+            $this->register = new \stdClass();
+            $this->register->mapping = new \stdClass();
+        }
+    }
+
     public function setConfig($config)
     {
+        $this->initRegister();
         foreach ($config as $key => $value) {
-            $this->register->{$key} = (object)$value;
+            $this->register->{$key} = $value;
+            $this->register->mapping->{$key} = $this->getType($value);
+        }
+        var_dump($this->register);
+    }
+
+    public function getType($value)
+    {
+        if (is_object($value)) {
+            return get_class($value);
+        } else {
+            return gettype($value);
         }
     }
 

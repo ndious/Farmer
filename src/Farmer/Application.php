@@ -13,7 +13,12 @@ class Application
     public function __construct($environment = 'production')
     {
         $this->environment = $environment;
-        $this->register = Register::getInstance();
+        $this->loadRegister();
+    }
+
+    public function loadRegister()
+    {
+        $this->register = new Register();
         if (!$this->register->isLoaded()) {
             $this->register->setConfig(json_decode(file_get_contents(dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'config.json')));
         }
@@ -53,7 +58,7 @@ class Application
 
     protected function sendTo($spawner, $message, $value)
     {
-        $spawner = $this->register->getSpawner(strtolower($spawner), $message)->$message($value);
+        //$spawner = $this->register->getSpawner(strtolower($spawner), $message)->$message($value);
     }
 
     private function kill($creeper)

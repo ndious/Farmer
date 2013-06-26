@@ -11,7 +11,7 @@
         ".DS_Store",
         "CreeperAbstract.php",
         "CreeperInterface.php"
-    ]
+    ],
     "runtime": [
         "autoloader",
         "log",

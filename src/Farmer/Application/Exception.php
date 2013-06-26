@@ -10,7 +10,7 @@ abstract class Exception extends \Exception
 	const BAD_IMPLEMENTATION = 3;
 	const BAD_REQUEST = 4;
 
-    public function __construct($message, $code, $previous)
+    public function __construct($message, $code, $previous = null)
     {
         Application::sendToLogger('log', $message);
         parent::__construct($message, $code, $previous);
